@@ -1,0 +1,12 @@
+{
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true
+    }
+  ],
+  "name": "agentforce",
+  "namespace": "",
+  "sfdcLoginUrl": "https://orgfarm-930e3e7509-dev-ed.develop.my.salesforce.com",
+  "sourceApiVersion": "65.0"
+}
