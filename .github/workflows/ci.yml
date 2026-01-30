@@ -23,20 +23,12 @@ jobs:
           npm install -g @salesforce/cli
           sf --version
 
-      - name: Authenticate (JWT)
+      - name: Authenticate (SFDX Auth URL)
         env:
-          SF_JWT_KEY_B64: ${{ secrets.SF_JWT_KEY_B64 }}
-          SF_CLIENT_ID: ${{ secrets.SF_CLIENT_ID }}
-          SF_USERNAME: ${{ secrets.SF_USERNAME }}
-          SF_INSTANCE_URL: ${{ secrets.SF_INSTANCE_URL }}
+          SF_SFDX_AUTH_URL_B64: ${{ secrets.SF_SFDX_AUTH_URL_B64 }}
         run: |
-          echo "$SF_JWT_KEY_B64" | base64 -d > server.key
-          sf org login jwt \
-            --client-id "$SF_CLIENT_ID" \
-            --jwt-key-file server.key \
-            --username "$SF_USERNAME" \
-            --instance-url "$SF_INSTANCE_URL" \
-            --set-default
+          echo "$SF_SFDX_AUTH_URL_B64" | base64 -d > sfdx_auth_url.txt
+          sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --set-default
           sf org display --json
 
       - name: Validate deploy (no tests yet)
