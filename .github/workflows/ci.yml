@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  deploy:
+  validate:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +31,26 @@ jobs:
           sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --set-default
           sf org display --json
 
-      - name: Validate deploy
+      - name: Deploy preview (informational)
         run: |
-          # `project deploy validate` requires running Apex tests.
+          sf project deploy preview --source-dir force-app || true
+
+      - name: Validate deploy (skip if nothing to deploy)
+        run: |
+          set +e
           sf project deploy validate --source-dir force-app --test-level RunLocalTests
+          code=$?
+          set -e
+
+          if [ $code -eq 0 ]; then
+            echo "Validation succeeded"
+            exit 0
+          fi
+
+          # Treat 'NothingToDeploy' as success in early scaffolding.
+          if sf project deploy validate --source-dir force-app --test-level RunLocalTests 2>&1 | grep -q "NothingToDeploy"; then
+            echo "Nothing to deploy; treating as success."
+            exit 0
+          fi
+
+          exit $code
