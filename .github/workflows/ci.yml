@@ -25,12 +25,12 @@ jobs:
 
       - name: Authenticate (JWT)
         env:
-          SF_JWT_KEY: ${{ secrets.SF_JWT_KEY }}
+          SF_JWT_KEY_B64: ${{ secrets.SF_JWT_KEY_B64 }}
           SF_CLIENT_ID: ${{ secrets.SF_CLIENT_ID }}
           SF_USERNAME: ${{ secrets.SF_USERNAME }}
           SF_INSTANCE_URL: ${{ secrets.SF_INSTANCE_URL }}
         run: |
-          echo "$SF_JWT_KEY" > server.key
+          echo "$SF_JWT_KEY_B64" | base64 -d > server.key
           sf org login jwt \
             --client-id "$SF_CLIENT_ID" \
             --jwt-key-file server.key \
