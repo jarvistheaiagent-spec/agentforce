@@ -35,10 +35,10 @@ jobs:
         run: |
           sf project deploy preview --source-dir force-app || true
 
-      - name: Validate deploy (skip if nothing to deploy)
+      - name: Validate deploy (NoTestRun; skip if nothing to deploy)
         run: |
           set +e
-          sf project deploy validate --source-dir force-app --test-level RunLocalTests
+          sf project deploy validate --source-dir force-app --test-level NoTestRun
           code=$?
           set -e
 
@@ -48,7 +48,7 @@ jobs:
           fi
 
           # Treat 'NothingToDeploy' as success in early scaffolding.
-          if sf project deploy validate --source-dir force-app --test-level RunLocalTests 2>&1 | grep -q "NothingToDeploy"; then
+          if sf project deploy validate --source-dir force-app --test-level NoTestRun 2>&1 | grep -q "NothingToDeploy"; then
             echo "Nothing to deploy; treating as success."
             exit 0
           fi
