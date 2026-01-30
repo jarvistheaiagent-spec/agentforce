@@ -18,3 +18,7 @@ node_modules/
 # Env
 .env
 .env.*
+
+# Secrets / local certs
+certs/salesforce/server.key
+certs/salesforce/server.crt
